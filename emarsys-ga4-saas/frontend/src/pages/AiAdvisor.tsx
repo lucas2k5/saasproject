@@ -12,7 +12,7 @@ function AiAdvisor() {
           <div className="chat-title">
             <div className="chat-icon">✶</div>
             <div>
-              <h2>KipiAIs Advisor</h2>
+              <h2>KeepAIS Advisor</h2>
               <p>Powered by GPT-4</p>
             </div>
           </div>
@@ -31,7 +31,7 @@ function AiAdvisor() {
             <div className="chat-avatar">AI</div>
             <div className="chat-bubble">
               <p>
-                Ola! Sou seu KipiAIs Advisor. Descreva o objetivo do dashboard e
+                Ola! Sou seu KeepAIS Advisor. Descreva o objetivo do dashboard e
                 quais metricas voce quer acompanhar.
               </p>
             </div>

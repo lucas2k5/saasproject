@@ -1,4 +1,4 @@
-# KipiAIs - Emarsys + GA4 SaaS
+# KeepAIS - Emarsys + GA4 SaaS
 
 ## Visao geral
 Projeto SaaS que unifica dados do Emarsys e GA4 para gerar dashboards e insights de marketing.

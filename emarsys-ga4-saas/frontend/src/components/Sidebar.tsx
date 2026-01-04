@@ -18,10 +18,9 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <span className="brand-mark">◎</span>
+        <span className="brand-mark" aria-hidden="true" />
         <div>
-          <p className="brand-title">KipiAIs</p>
-          <p className="brand-subtitle">Emarsys + GA4</p>
+          <p className="brand-title">KeepAIS</p>
         </div>
       </div>
 
