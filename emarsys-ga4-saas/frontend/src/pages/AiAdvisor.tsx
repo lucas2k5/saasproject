@@ -1,11 +1,14 @@
 import DashboardLayout from "../components/DashboardLayout";
+import { useLocale } from "../context/LocaleContext";
 
 function AiAdvisor() {
+  const { t } = useLocale();
+
   return (
     <DashboardLayout
-      title="AI Advisor"
-      subtitle="Recomendacoes inteligentes para escalar resultados"
-      label="AI Advisor"
+      title={t("advisor.title")}
+      subtitle={t("advisor.subtitle")}
+      label={t("advisor.label")}
     >
       <section className="flex min-h-[560px] flex-col gap-6 rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -14,8 +17,12 @@ function AiAdvisor() {
               ✶
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-[color:var(--ink)]">KeepAIS Advisor</h2>
-              <p className="text-sm text-[color:var(--muted)]">Powered by GPT-4</p>
+              <h2 className="text-lg font-semibold text-[color:var(--ink)]">
+                {t("advisor.headerTitle")}
+              </h2>
+              <p className="text-sm text-[color:var(--muted)]">
+                {t("advisor.headerSubtitle")}
+              </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -23,13 +30,13 @@ function AiAdvisor() {
               className="rounded-full border border-[color:var(--stroke)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--ink)] opacity-80 transition hover:opacity-100"
               type="button"
             >
-              Novo briefing
+              {t("advisor.newBrief")}
             </button>
             <button
               className="rounded-full bg-[color:var(--accent)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_12px_30px_rgba(255,106,61,0.35)] transition hover:bg-[#ff8a66]"
               type="button"
             >
-              Gerar dashboard
+              {t("advisor.generate")}
             </button>
           </div>
         </div>
@@ -40,14 +47,12 @@ function AiAdvisor() {
               AI
             </div>
             <div className="max-w-[75%] rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] px-4 py-3 text-sm text-[color:var(--ink)]">
-              Ola! Sou seu KeepAIS Advisor. Descreva o objetivo do dashboard e quais metricas
-              voce quer acompanhar.
+              {t("advisor.message.assistant1")}
             </div>
           </div>
           <div className="flex items-start justify-end gap-3">
             <div className="max-w-[75%] rounded-2xl border border-[color:var(--stroke)] bg-[rgba(255,106,61,0.12)] px-4 py-3 text-sm text-[color:var(--ink)]">
-              Quero um dashboard de carrinho abandonado com conversoes por canal e taxa de
-              recuperacao semanal.
+              {t("advisor.message.user1")}
             </div>
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(255,106,61,0.2)] text-xs font-semibold text-[color:var(--accent)]">
               JD
@@ -58,8 +63,7 @@ function AiAdvisor() {
               AI
             </div>
             <div className="max-w-[75%] rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] px-4 py-3 text-sm text-[color:var(--ink)]">
-              Perfeito. Vou montar um painel com: volume de carrinhos, valor recuperado,
-              conversoes por canal e tendencia semanal. Quer incluir alertas automaticos?
+              {t("advisor.message.assistant2")}
             </div>
           </div>
         </div>
@@ -70,7 +74,7 @@ function AiAdvisor() {
         >
           <input
             type="text"
-            placeholder="Peça um dashboard, pergunte sobre performance, ou descreva um playbook..."
+            placeholder={t("advisor.placeholder")}
             className="flex-1 bg-transparent text-sm text-[color:var(--ink)] placeholder:text-[color:var(--muted)] focus:outline-none"
           />
           <button

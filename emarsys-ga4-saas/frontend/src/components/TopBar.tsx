@@ -1,3 +1,5 @@
+import { useLocale } from "../context/LocaleContext";
+
 type TopBarProps = {
   title: string;
   subtitle: string;
@@ -5,6 +7,8 @@ type TopBarProps = {
 };
 
 function TopBar({ title, subtitle, label = "Dashboard Overview" }: TopBarProps) {
+  const { t } = useLocale();
+
   return (
     <header className="flex flex-col gap-6 border-b border-[color:var(--stroke)] pb-6 lg:flex-row lg:items-center lg:justify-between">
       <div className="space-y-2">
@@ -21,13 +25,13 @@ function TopBar({ title, subtitle, label = "Dashboard Overview" }: TopBarProps) 
           className="rounded-full border border-[color:var(--stroke)] px-5 py-2.5 text-sm font-semibold text-[color:var(--ink)] opacity-80 transition hover:opacity-100"
           type="button"
         >
-          Preview
+          {t("topbar.preview")}
         </button>
         <button
           className="rounded-full bg-[color:var(--accent)] px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(255,106,61,0.35)] transition hover:bg-[#ff8a66]"
           type="button"
         >
-          Sync Data Source
+          {t("topbar.sync")}
         </button>
       </div>
     </header>

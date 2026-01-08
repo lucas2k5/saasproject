@@ -8,9 +8,16 @@ type AreaChartProps = {
   subtitle: string;
   series: ChartPoint[];
   accent?: string;
+  tags?: string[];
 };
 
-function AreaChart({ title, subtitle, series, accent = "var(--accent)" }: AreaChartProps) {
+function AreaChart({
+  title,
+  subtitle,
+  series,
+  accent = "var(--accent)",
+  tags = []
+}: AreaChartProps) {
   const maxValue = Math.max(...series.map((point) => point.value), 1);
   const width = 680;
   const height = 240;
@@ -35,10 +42,13 @@ function AreaChart({ title, subtitle, series, accent = "var(--accent)" }: AreaCh
           <h2 className="text-lg font-semibold text-[color:var(--ink)]">{title}</h2>
           <p className="text-sm text-[color:var(--muted)]">{subtitle}</p>
         </div>
-        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-          <span>Last 7 days</span>
-          <span>Live</span>
-        </div>
+        {tags.length > 0 && (
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
+            {tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+        )}
       </div>
       <div className="mt-6 rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] p-4">
         <svg

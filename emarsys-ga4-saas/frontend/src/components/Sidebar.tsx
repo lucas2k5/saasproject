@@ -1,13 +1,14 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLocale } from "../context/LocaleContext";
 
 const navItems = [
-  { label: "Overview", path: "/dashboard" },
-  { label: "Campaigns", path: "/dashboard/campaigns" },
-  { label: "Abandoned Carts", path: "/dashboard/abandoned-carts" },
-  { label: "Analytics", path: "/dashboard/analytics" },
-  { label: "AI Advisor", path: "/dashboard/ai-advisor" },
-  { label: "Playbooks", path: "/dashboard/playbooks" }
+  { labelKey: "nav.overview", path: "/dashboard" },
+  { labelKey: "nav.campaigns", path: "/dashboard/campaigns" },
+  { labelKey: "nav.abandonedCarts", path: "/dashboard/abandoned-carts" },
+  { labelKey: "nav.analytics", path: "/dashboard/analytics" },
+  { labelKey: "nav.aiAdvisor", path: "/dashboard/ai-advisor" },
+  { labelKey: "nav.playbooks", path: "/dashboard/playbooks" }
 ];
 
 type SidebarProps = {
@@ -19,6 +20,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
   const linkBase =
     "flex items-center gap-3 rounded-xl border border-transparent px-3 py-2 text-sm font-medium transition";
   const { user, signOut } = useAuth();
+  const { t } = useLocale();
   const navigate = useNavigate();
   const metadata = user?.user_metadata as Record<string, unknown> | undefined;
   const fullName = typeof metadata?.full_name === "string" ? metadata.full_name : null;
@@ -47,7 +49,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
       <nav className="space-y-2">
         {navItems.map((item) => (
           <NavLink
-            key={item.label}
+            key={item.labelKey}
             to={item.path}
             className={({ isActive }) =>
               `${linkBase} ${
@@ -58,7 +60,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
             }
           >
             <span className="h-2.5 w-2.5 rounded-full bg-[color:var(--accent-2)] opacity-70" />
-            {item.label}
+            {t(item.labelKey)}
           </NavLink>
         ))}
       </nav>
@@ -71,10 +73,10 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
         >
           <span className="h-2.5 w-2.5 rounded-full bg-[color:var(--accent-2)]" />
           <span className="flex-1 text-left">
-            {theme === "dark" ? "Dark Mode" : "Light Mode"}
+            {theme === "dark" ? t("sidebar.darkMode") : t("sidebar.lightMode")}
           </span>
           <span className="rounded-full bg-[color:var(--surface-strong)] px-3 py-1 text-[10px] font-semibold text-[color:var(--muted)]">
-            {theme === "dark" ? "On" : "Off"}
+            {theme === "dark" ? t("sidebar.on") : t("sidebar.off")}
           </span>
         </button>
 
@@ -88,7 +90,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
             </div>
             <div className="min-w-0">
               <p className="text-[11px] uppercase tracking-[0.3em] text-[color:var(--muted)]">
-                Workspace
+                {t("sidebar.workspace")}
               </p>
               <p className="truncate text-sm font-semibold text-[color:var(--ink)]">
                 {displayName}
@@ -102,7 +104,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
             </div>
           </Link>
           <button
-            className="mt-4 w-full rounded-2xl border border-[color:var(--stroke)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--ink)] opacity-80 transition hover:opacity-100"
+            className="mt-4 inline-flex w-full items-center justify-center rounded-2xl border border-[color:var(--stroke)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--ink)] opacity-80 transition hover:opacity-100 sm:w-auto"
             type="button"
             onClick={async () => {
               const result = await signOut();
@@ -111,7 +113,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
               }
             }}
           >
-            Sair da conta
+            {t("sidebar.logout")}
           </button>
         </div>
       </div>

@@ -6,13 +6,16 @@ import App from "./App";
 import "./index.css";
 import { queryClient } from "./lib/queryClient";
 import { AuthProvider } from "./context/AuthContext";
+import { LocaleProvider } from "./context/LocaleContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <LocaleProvider>
+            <App />
+          </LocaleProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -4,6 +4,7 @@ import AreaChart from "../components/AreaChart";
 import DashboardLayout from "../components/DashboardLayout";
 import StatCard from "../components/StatCard";
 import { useAuth } from "../context/AuthContext";
+import { useLocale } from "../context/LocaleContext";
 import { fetchReport, type ReportSource } from "../lib/api";
 import { fetchEngagementPrediction } from "../lib/ml";
 import type { ReportPayload } from "../types/reports";
@@ -19,17 +20,11 @@ const percentFormatter = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 1
 });
 
-const sources: { id: ReportSource; label: string }[] = [
-  { id: "combined", label: "Combinado" },
-  { id: "emarsys", label: "Emarsys" },
-  { id: "ga4", label: "GA4" }
+const sources: { id: ReportSource; labelKey: string }[] = [
+  { id: "combined", labelKey: "source.combined" },
+  { id: "emarsys", labelKey: "source.emarsys" },
+  { id: "ga4", labelKey: "source.ga4" }
 ];
-
-const segmentLabels: Record<string, string> = {
-  high: "Alto",
-  medium: "Médio",
-  low: "Baixo"
-};
 
 const mockReport: ReportPayload = {
   source: "combined",
@@ -59,17 +54,17 @@ const mockReport: ReportPayload = {
 };
 
 const channelMix = [
-  { label: "Email", value: 42, color: "#35d5ff" },
-  { label: "SMS", value: 18, color: "#ffb86b" },
-  { label: "Push", value: 14, color: "#8b7bff" },
-  { label: "Ads", value: 26, color: "#ff6a3d" }
+  { labelKey: "channel.email", value: 42, color: "#35d5ff" },
+  { labelKey: "channel.sms", value: 18, color: "#ffb86b" },
+  { labelKey: "channel.push", value: 14, color: "#8b7bff" },
+  { labelKey: "channel.ads", value: 26, color: "#ff6a3d" }
 ];
 
 const funnelSteps = [
-  { label: "Envios", key: "sends" },
-  { label: "Aberturas", key: "opens" },
-  { label: "Cliques", key: "clicks" },
-  { label: "Conversões", key: "conversions" }
+  { labelKey: "funnel.sends", key: "sends" },
+  { labelKey: "funnel.opens", key: "opens" },
+  { labelKey: "funnel.clicks", key: "clicks" },
+  { labelKey: "funnel.conversions", key: "conversions" }
 ];
 
 const createConicGradient = (items: { value: number; color: string }[]) => {
@@ -88,6 +83,7 @@ const createConicGradient = (items: { value: number; color: string }[]) => {
 function Dashboard() {
   const [source, setSource] = useState<ReportSource>("combined");
   const { user } = useAuth();
+  const { t } = useLocale();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["reports", source],
@@ -100,7 +96,7 @@ function Dashboard() {
   const summary = resolvedReport.summary;
   const series = resolvedReport.series ?? [];
   const sourceLabel =
-    sources.find((item) => item.id === source)?.label ?? "Combinado";
+    sources.find((item) => item.id === source)?.labelKey ?? "source.combined";
   const chartPoints = useMemo(
     () =>
       series.map((point) => ({ date: point.date, value: point.conversions })),
@@ -145,16 +141,21 @@ function Dashboard() {
 
   const scoreLabel = prediction ? percentFormatter.format(prediction.score) : "--";
   const segmentLabel = prediction
-    ? segmentLabels[prediction.segment] ?? prediction.segment
+    ? t(`segment.${prediction.segment}`)
     : "--";
-  const mlDelta = mlError ? "Indisponível" : isMlLoading ? "Carregando" : `Segmento: ${segmentLabel}`;
+  const mlDelta = mlError
+    ? t("dashboard.unavailable")
+    : isMlLoading
+      ? t("dashboard.loading")
+      : `${t("dashboard.segment")}: ${segmentLabel}`;
   const mlVariant =
     mlError ? "negative" : prediction?.segment === "high" ? "positive" : "neutral";
 
   return (
     <DashboardLayout
-      title="Dashboard Overview"
-      subtitle="Unified Emarsys & Google Analytics insights"
+      title={t("dashboard.title")}
+      subtitle={t("dashboard.subtitle")}
+      label={t("dashboard.label")}
     >
       <section className="flex flex-wrap items-center gap-3 rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-3">
         {sources.map((item) => (
@@ -168,22 +169,22 @@ function Dashboard() {
             }`}
             onClick={() => setSource(item.id)}
           >
-            {item.label}
+            {t(item.labelKey)}
           </button>
         ))}
         <span className="ml-auto text-sm text-[color:var(--muted)]">
-          Fonte ativa: {sourceLabel}
+          {t("dashboard.activeSource")}: {t(sourceLabel)}
         </span>
         {usingMock && (
           <span className="rounded-full border border-[color:var(--stroke)] px-3 py-1 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-            Dados simulados
+            {t("dashboard.mockData")}
           </span>
         )}
       </section>
 
       {isLoading && !report && (
         <div className="rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 text-sm text-[color:var(--muted)]">
-          Carregando dados...
+          {t("dashboard.loading")}
         </div>
       )}
 
@@ -191,35 +192,35 @@ function Dashboard() {
         <>
           <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             <StatCard
-              label="Total Revenue"
+              label={t("dashboard.stat.totalRevenue")}
               value={currencyFormatter.format(revenue)}
               delta="+12.5%"
               variant="positive"
               icon="$"
             />
             <StatCard
-              label="Abandoned Cart Value"
+              label={t("dashboard.stat.abandonedValue")}
               value={currencyFormatter.format(abandonedValue)}
               delta="-4.2%"
               variant="negative"
               icon="🛒"
             />
             <StatCard
-              label="Avg. Open Rate"
+              label={t("dashboard.stat.openRate")}
               value={percentFormatter.format(openRate)}
               delta="+2.1%"
               variant="positive"
               icon="✉️"
             />
             <StatCard
-              label="Cart Recovery Rate"
+              label={t("dashboard.stat.recoveryRate")}
               value={percentFormatter.format(conversionRate)}
               delta="+5.4%"
               variant="positive"
               icon="⟳"
             />
             <StatCard
-              label="Engagement Score"
+              label={t("dashboard.stat.engagementScore")}
               value={scoreLabel}
               delta={mlDelta}
               variant={mlVariant}
@@ -229,22 +230,23 @@ function Dashboard() {
 
           <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
             <AreaChart
-              title="Campaign Performance & Abandoned Carts"
-              subtitle="Evolucao de conversoes no periodo"
+              title={t("dashboard.panel.performanceTitle")}
+              subtitle={t("dashboard.panel.performanceSubtitle")}
               series={chartPoints}
+              tags={[t("dashboard.panel.last7Days"), t("dashboard.panel.live")]}
             />
             <section className="rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-semibold text-[color:var(--ink)]">
-                    Bounce Rates by Campaign
+                    {t("dashboard.panel.bounceTitle")}
                   </h2>
                   <p className="text-sm text-[color:var(--muted)]">
-                    Benchmark dos ultimos disparos
+                    {t("dashboard.panel.bounceSubtitle")}
                   </p>
                 </div>
                 <div className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                  12 campaigns
+                  12 {t("dashboard.panel.campaignsLabel")}
                 </div>
               </div>
               <div className="mt-6 space-y-4">
@@ -268,10 +270,10 @@ function Dashboard() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-semibold text-[color:var(--ink)]">
-                    Mix de canais
+                    {t("dashboard.panel.mixTitle")}
                   </h2>
                   <p className="text-sm text-[color:var(--muted)]">
-                    Distribuicao percentual de origem
+                    {t("dashboard.panel.mixSubtitle")}
                   </p>
                 </div>
               </div>
@@ -288,12 +290,14 @@ function Dashboard() {
                 </div>
                 <div className="grid gap-3 text-sm">
                   {channelMix.map((item) => (
-                    <div className="flex items-center gap-3" key={item.label}>
+                    <div className="flex items-center gap-3" key={item.labelKey}>
                       <span
                         className="h-3 w-3 rounded-full"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="text-[color:var(--muted)]">{item.label}</span>
+                      <span className="text-[color:var(--muted)]">
+                        {t(item.labelKey)}
+                      </span>
                       <span className="ml-auto font-semibold text-[color:var(--ink)]">
                         {item.value}%
                       </span>
@@ -306,10 +310,10 @@ function Dashboard() {
             <section className="rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
               <div>
                 <h2 className="text-lg font-semibold text-[color:var(--ink)]">
-                  Plot de engajamento
+                  {t("dashboard.panel.plotTitle")}
                 </h2>
                 <p className="text-sm text-[color:var(--muted)]">
-                  Relacao entre abertura e clique
+                  {t("dashboard.panel.plotSubtitle")}
                 </p>
               </div>
               <div className="mt-6 rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] p-4">
@@ -356,10 +360,10 @@ function Dashboard() {
             <section className="rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
               <div>
                 <h2 className="text-lg font-semibold text-[color:var(--ink)]">
-                  Funil de conversao
+                  {t("dashboard.panel.funnelTitle")}
                 </h2>
                 <p className="text-sm text-[color:var(--muted)]">
-                  Evolucao dos usuarios pelo funil
+                  {t("dashboard.panel.funnelSubtitle")}
                 </p>
               </div>
               <div className="mt-6 space-y-4">
@@ -367,9 +371,9 @@ function Dashboard() {
                   const value = summary[step.key as keyof typeof summary] as number;
                   const width = summary.sends ? (value / summary.sends) * 100 : 0;
                   return (
-                    <div className="space-y-2 text-sm" key={step.label}>
+                    <div className="space-y-2 text-sm" key={step.labelKey}>
                       <div className="flex items-center justify-between text-[color:var(--muted)]">
-                        <span>{step.label}</span>
+                        <span>{t(step.labelKey)}</span>
                         <span className="text-[color:var(--ink)]">
                           {formatter.format(value)}
                         </span>

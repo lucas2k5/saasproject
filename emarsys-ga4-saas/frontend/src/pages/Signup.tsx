@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import GoogleIcon from "../components/GoogleIcon";
 import { useAuth } from "../context/AuthContext";
+import { useLocale } from "../context/LocaleContext";
 
 function Signup() {
   const { user, signUp, signInWithGoogle, loading, error, hasSupabaseConfig } = useAuth();
+  const { t } = useLocale();
   const [fullName, setFullName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [phone, setPhone] = useState("");
@@ -24,7 +26,7 @@ function Signup() {
     setSuccessMessage(null);
 
     if (!marketingConsent) {
-      setFormError("Selecione sua preferência de comunicação.");
+      setFormError(t("signup.consentError"));
       return;
     }
 
@@ -41,15 +43,21 @@ function Signup() {
       return;
     }
 
-    setSuccessMessage("Cadastro criado! Verifique seu e-mail para confirmar o acesso.");
+    setSuccessMessage(t("signup.success"));
   };
 
   return (
     <div className="min-h-screen bg-[#0c0f1a] px-6 py-16 text-white">
       <div className="mx-auto flex w-full max-w-md flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_60px_rgba(7,11,24,0.45)]">
+        <Link
+          to="/login"
+          className="self-start text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 transition hover:text-white"
+        >
+          {t("signup.back")}
+        </Link>
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-semibold">Criar conta KeepAIS</h1>
-          <p className="text-sm text-slate-400">Comece a unificar seus dados agora.</p>
+          <h1 className="text-3xl font-semibold">{t("signup.title")}</h1>
+          <p className="text-sm text-slate-400">{t("signup.subtitle")}</p>
         </div>
 
         {(formError || error) && (
@@ -77,18 +85,18 @@ function Signup() {
           className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-70"
         >
           <GoogleIcon className="h-5 w-5" />
-          Continuar com Google
+          {t("signup.google")}
         </button>
 
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500">
           <span className="h-px flex-1 bg-white/10" />
-          ou
+          {t("signup.or")}
           <span className="h-px flex-1 bg-white/10" />
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="flex flex-col gap-2 text-sm">
-            Nome completo
+            {t("signup.fullName")}
             <input
               type="text"
               value={fullName}
@@ -100,7 +108,7 @@ function Signup() {
             />
           </label>
           <label className="flex flex-col gap-2 text-sm">
-            Nome da empresa
+            {t("signup.company")}
             <input
               type="text"
               value={companyName}
@@ -112,7 +120,7 @@ function Signup() {
             />
           </label>
           <label className="flex flex-col gap-2 text-sm">
-            Telefone
+            {t("signup.phone")}
             <input
               type="tel"
               value={phone}
@@ -124,7 +132,7 @@ function Signup() {
             />
           </label>
           <label className="flex flex-col gap-2 text-sm">
-            E-mail
+            {t("signup.email")}
             <input
               type="email"
               value={email}
@@ -136,7 +144,7 @@ function Signup() {
             />
           </label>
           <label className="flex flex-col gap-2 text-sm">
-            Senha
+            {t("signup.password")}
             <input
               type="password"
               value={password}
@@ -148,9 +156,7 @@ function Signup() {
             />
           </label>
           <fieldset className="space-y-2 text-sm">
-            <legend className="text-sm text-slate-300">
-              Preferência de comunicação (LGPD)
-            </legend>
+            <legend className="text-sm text-slate-300">{t("signup.lgpdTitle")}</legend>
             <label className="flex items-center gap-2 text-sm text-slate-300">
               <input
                 type="radio"
@@ -160,7 +166,7 @@ function Signup() {
                 onChange={() => setMarketingConsent("opt-in")}
                 disabled={loading}
               />
-              Aceito receber comunicações e novidades.
+              {t("signup.optIn")}
             </label>
             <label className="flex items-center gap-2 text-sm text-slate-300">
               <input
@@ -171,7 +177,7 @@ function Signup() {
                 onChange={() => setMarketingConsent("opt-out")}
                 disabled={loading}
               />
-              Não aceito receber comunicações (opt-out).
+              {t("signup.optOut")}
             </label>
           </fieldset>
           <button
@@ -179,14 +185,14 @@ function Signup() {
             disabled={loading || !hasSupabaseConfig}
             className="w-full rounded-full bg-orange-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {loading ? "Criando..." : "Criar conta"}
+            {loading ? t("signup.loading") : t("signup.submit")}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-400">
-          Já tem conta?{" "}
+          {t("signup.loginPrompt")}{" "}
           <Link to="/login" className="text-orange-300 hover:text-orange-200">
-            Entrar
+            {t("signup.loginLink")}
           </Link>
         </p>
       </div>
