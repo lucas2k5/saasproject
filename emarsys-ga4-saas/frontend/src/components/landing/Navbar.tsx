@@ -44,7 +44,9 @@ function Navbar() {
 
         <div className="flex items-center gap-3">
           <Badge variant="highlight">5 integrações nativas</Badge>
-          <Button variant="ghost">Entrar</Button>
+          <Button variant="ghost" asChild>
+            <Link to="/login">Entrar</Link>
+          </Button>
           <Button asChild>
             <Link to="/dashboard">Abrir console</Link>
           </Button>

@@ -10,7 +10,7 @@ type AreaChartProps = {
   accent?: string;
 };
 
-function AreaChart({ title, subtitle, series, accent = "#ff7a59" }: AreaChartProps) {
+function AreaChart({ title, subtitle, series, accent = "var(--accent)" }: AreaChartProps) {
   const maxValue = Math.max(...series.map((point) => point.value), 1);
   const width = 680;
   const height = 240;
@@ -29,19 +29,25 @@ function AreaChart({ title, subtitle, series, accent = "#ff7a59" }: AreaChartPro
   const areaPath = `${linePath} L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`;
 
   return (
-    <section className="panel">
-      <div className="panel-header">
+    <section className="rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2>{title}</h2>
-          <p>{subtitle}</p>
+          <h2 className="text-lg font-semibold text-[color:var(--ink)]">{title}</h2>
+          <p className="text-sm text-[color:var(--muted)]">{subtitle}</p>
         </div>
-        <div className="panel-tags">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
           <span>Last 7 days</span>
           <span>Live</span>
         </div>
       </div>
-      <div className="panel-chart">
-        <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
+      <div className="mt-6 rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] p-4">
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          role="img"
+          aria-label={title}
+          className="h-56 w-full"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <defs>
             <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={accent} stopOpacity="0.35" />

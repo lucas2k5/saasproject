@@ -20,6 +20,12 @@
   --muted: rgba(237, 241, 247, 0.65);
   --ink: #f4f6fb;
   --shadow: 0 30px 60px rgba(5, 8, 20, 0.6);
+  --positive-bg: rgba(58, 255, 164, 0.18);
+  --positive-text: #7affb5;
+  --negative-bg: rgba(255, 106, 61, 0.18);
+  --negative-text: #ffb199;
+  --neutral-bg: rgba(255, 255, 255, 0.08);
+  --neutral-text: rgba(237, 241, 247, 0.65);
 }
 
 * {
@@ -559,9 +565,6 @@ button {
 }
 
 .dashboard-shell {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 100vh;
   background: var(--bg);
 }
 
@@ -576,6 +579,12 @@ button {
   --muted: rgba(20, 26, 40, 0.72);
   --ink: #0f172a;
   --shadow: 0 24px 50px rgba(18, 24, 40, 0.1);
+  --positive-bg: #dcfce7;
+  --positive-text: #166534;
+  --negative-bg: #fee2e2;
+  --negative-text: #991b1b;
+  --neutral-bg: #e2e8f0;
+  --neutral-text: #1f2937;
 }
 
 .sidebar {

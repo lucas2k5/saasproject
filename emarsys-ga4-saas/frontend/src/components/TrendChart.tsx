@@ -19,13 +19,20 @@ function TrendChart({ title, points }: TrendChartProps) {
     Math.max(points.length, 1);
 
   return (
-    <section className="chart-card">
-      <header className="chart-header">
-        <h2>{title}</h2>
-        <p className="chart-subtitle">Ultimos 7 dias</p>
+    <section className="rounded-3xl border border-[color:var(--stroke)] bg-[color:var(--surface)] p-6 shadow-[0_22px_40px_rgba(8,12,24,0.3)]">
+      <header className="flex items-start justify-between gap-4">
+        <h2 className="text-lg font-semibold text-[color:var(--ink)]">{title}</h2>
+        <p className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
+          Ultimos 7 dias
+        </p>
       </header>
-      <div className="chart-body">
-        <svg viewBox={`0 0 ${chartWidth} 240`} role="img" aria-label={title}>
+      <div className="mt-4 rounded-2xl border border-[color:var(--stroke)] bg-[color:var(--bg-soft)] p-4">
+        <svg
+          viewBox={`0 0 ${chartWidth} 240`}
+          role="img"
+          aria-label={title}
+          className="text-[color:var(--muted)]"
+        >
           <defs>
             <linearGradient id="barFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#ff7a59" />
