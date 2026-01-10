@@ -80,6 +80,9 @@ const createConicGradient = (items: { value: number; color: string }[]) => {
   return stops.join(", ");
 };
 
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
 function Dashboard() {
   const [source, setSource] = useState<ReportSource>("combined");
   const { user } = useAuth();
@@ -106,11 +109,29 @@ function Dashboard() {
   const plotPoints = useMemo(
     () =>
       series.map((point) => ({
-        x: point.opens / Math.max(point.sends, 1),
-        y: point.clicks / Math.max(point.opens, 1)
+        x: clamp(point.opens / Math.max(point.sends, 1), 0, 1),
+        y: clamp(point.clicks / Math.max(point.opens, 1), 0, 1)
       })),
     [series]
   );
+  const plotTrend = useMemo(() => {
+    if (!plotPoints.length) {
+      return { slope: 0, intercept: 0.5 };
+    }
+    const meanX = plotPoints.reduce((sum, point) => sum + point.x, 0) / plotPoints.length;
+    const meanY = plotPoints.reduce((sum, point) => sum + point.y, 0) / plotPoints.length;
+    const numerator = plotPoints.reduce(
+      (sum, point) => sum + (point.x - meanX) * (point.y - meanY),
+      0
+    );
+    const denominator = plotPoints.reduce(
+      (sum, point) => sum + (point.x - meanX) * (point.x - meanX),
+      0
+    );
+    const slope = denominator === 0 ? 0 : numerator / denominator;
+    const intercept = meanY - slope * meanX;
+    return { slope, intercept };
+  }, [plotPoints]);
 
   const openRate = summary.openRate ?? 0;
   const conversionRate = summary.conversionRate ?? 0;
@@ -324,35 +345,133 @@ function Dashboard() {
                   className="h-52 w-full"
                   preserveAspectRatio="xMidYMid meet"
                 >
-                  {[0.25, 0.5, 0.75].map((line) => (
-                    <line
-                      key={line}
-                      x1={24}
-                      x2={296}
-                      y1={200 - 24 - line * 152}
-                      y2={200 - 24 - line * 152}
-                      stroke="rgba(255,255,255,0.08)"
-                    />
-                  ))}
-                  {[0.25, 0.5, 0.75].map((line) => (
-                    <line
-                      key={`x-${line}`}
-                      y1={24}
-                      y2={176}
-                      x1={24 + line * 272}
-                      x2={24 + line * 272}
-                      stroke="rgba(255,255,255,0.08)"
-                    />
-                  ))}
-                  <line x1={24} y1={176} x2={296} y2={176} stroke="rgba(255,255,255,0.2)" />
-                  <line x1={24} y1={24} x2={24} y2={176} stroke="rgba(255,255,255,0.2)" />
-                  {plotPoints.map((point, index) => {
-                    const x = 24 + point.x * 272;
-                    const y = 176 - point.y * 152;
+                  {(() => {
+                    const margin = { left: 40, right: 16, top: 24, bottom: 28 };
+                    const width = 320 - margin.left - margin.right;
+                    const height = 200 - margin.top - margin.bottom;
+                    const yBase = margin.top + height;
+                    const xBase = margin.left;
+                    const trendY0 = clamp(plotTrend.intercept, 0, 1);
+                    const trendY1 = clamp(plotTrend.slope + plotTrend.intercept, 0, 1);
+
                     return (
-                      <circle key={index} cx={x} cy={y} r={5} fill="var(--accent)" />
+                      <>
+                        {[0.25, 0.5, 0.75].map((line) => (
+                          <line
+                            key={line}
+                            x1={xBase}
+                            x2={xBase + width}
+                            y1={yBase - line * height}
+                            y2={yBase - line * height}
+                            stroke="var(--stroke)"
+                          />
+                        ))}
+                        {[0.25, 0.5, 0.75].map((line) => (
+                          <line
+                            key={`x-${line}`}
+                            y1={margin.top}
+                            y2={yBase}
+                            x1={xBase + line * width}
+                            x2={xBase + line * width}
+                            stroke="var(--stroke)"
+                          />
+                        ))}
+                        <line
+                          x1={xBase}
+                          y1={yBase}
+                          x2={xBase + width}
+                          y2={yBase}
+                          stroke="var(--muted)"
+                          strokeWidth={1.2}
+                        />
+                        <line
+                          x1={xBase}
+                          y1={margin.top}
+                          x2={xBase}
+                          y2={yBase}
+                          stroke="var(--muted)"
+                          strokeWidth={1.2}
+                        />
+                        <line
+                          x1={xBase}
+                          y1={yBase - trendY0 * height}
+                          x2={xBase + width}
+                          y2={yBase - trendY1 * height}
+                          stroke="var(--ink)"
+                          strokeWidth={2}
+                        />
+                        {plotPoints.map((point, index) => {
+                          const x = xBase + point.x * width;
+                          const y = yBase - point.y * height;
+                          return (
+                            <circle
+                              key={index}
+                              cx={x}
+                              cy={y}
+                              r={4.5}
+                              fill="var(--accent-2)"
+                              fillOpacity={0.9}
+                            />
+                          );
+                        })}
+                        {[0, 0.5, 1].map((tick) => (
+                          <text
+                            key={`x-label-${tick}`}
+                            x={xBase + tick * width}
+                            y={yBase + 18}
+                            textAnchor="middle"
+                            fontSize="10"
+                            fill="var(--muted)"
+                          >
+                            {Math.round(tick * 100)}%
+                          </text>
+                        ))}
+                        {[0, 0.5, 1].map((tick) => (
+                          <text
+                            key={`y-label-${tick}`}
+                            x={xBase - 8}
+                            y={yBase - tick * height}
+                            textAnchor="end"
+                            fontSize="10"
+                            fill="var(--muted)"
+                            dominantBaseline="middle"
+                          >
+                            {Math.round(tick * 100)}%
+                          </text>
+                        ))}
+                        <text
+                          x={xBase + width / 2}
+                          y={200}
+                          textAnchor="middle"
+                          fontSize="11"
+                          fill="var(--muted)"
+                        >
+                          {t("dashboard.panel.plotXAxis")}
+                        </text>
+                        <text
+                          x={10}
+                          y={margin.top + height / 2}
+                          textAnchor="middle"
+                          fontSize="11"
+                          fill="var(--muted)"
+                          transform={`rotate(-90 10 ${margin.top + height / 2})`}
+                        >
+                          {t("dashboard.panel.plotYAxis")}
+                        </text>
+                        <g>
+                          <circle cx={xBase} cy={margin.top - 10} r={4} fill="var(--accent-2)" />
+                          <text
+                            x={xBase + 12}
+                            y={margin.top - 6}
+                            fontSize="11"
+                            fill="var(--muted)"
+                          >
+                            {t("dashboard.panel.plotLegend")}
+                          </text>
+                        </g>
+                      </>
                     );
-                  })}
+                  })()}
                 </svg>
               </div>
             </section>

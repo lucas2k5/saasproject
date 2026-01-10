@@ -1,3 +1,4 @@
+import { apiUrl } from "../config/api";
 import { supabaseClient } from "./supabaseClient";
 
 export type EngagementPrediction = {
@@ -18,7 +19,7 @@ export async function fetchEngagementPrediction(
     throw new Error("Missing access token");
   }
 
-  const response = await fetch("/api/ml/engagement", {
+  const response = await fetch(apiUrl("/api/ml/engagement"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
