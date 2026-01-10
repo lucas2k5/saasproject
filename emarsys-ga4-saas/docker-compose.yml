@@ -10,9 +10,7 @@ services:
     environment:
       - PORT=3001
       - ML_SERVICE_URL=http://ml-service:8001
-      - CORS_ORIGIN=http://localhost
-    ports:
-      - "3001:3001"
+      - CORS_ORIGIN=${CORS_ORIGIN}
     depends_on:
       - ml-service
 
@@ -24,9 +22,20 @@ services:
         VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
         VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
         VITE_API_URL: ${VITE_API_URL}
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2-alpine
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
+      - frontend
       - backend
 
   ml-service:
@@ -35,5 +44,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
-    ports:
-      - "8001:8001"
+
+volumes:
+  caddy_data:
+  caddy_config:
