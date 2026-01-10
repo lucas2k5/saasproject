@@ -30,12 +30,41 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0f1a] px-6 py-16 text-white">
-      <div className="mx-auto flex w-full max-w-md flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_60px_rgba(7,11,24,0.45)]">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-semibold">{t("login.title")}</h1>
-          <p className="text-sm text-slate-400">{t("login.subtitle")}</p>
-        </div>
+    <div className="min-h-screen bg-[#0c0f1a] px-6 py-12 text-white">
+      <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <aside className="hidden flex-col justify-between rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),transparent_60%),radial-gradient(circle_at_bottom,_rgba(249,115,22,0.18),transparent_55%)] p-10 shadow-[0_30px_60px_rgba(7,11,24,0.45)] lg:flex">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-orange-400/90 shadow-[0_0_18px_rgba(255,122,61,0.35)]" />
+              <span className="text-lg font-semibold text-white">KeepAIS</span>
+            </div>
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300">
+                Workspace seguro
+              </p>
+              <h2 className="text-3xl font-semibold text-white">
+                Centralize seus dados e decida com confiança.
+              </h2>
+              <p className="text-sm text-slate-300">
+                Acompanhe métricas críticas de Emarsys, GA4 e CRM em um único painel.
+              </p>
+            </div>
+          </div>
+          <div className="space-y-3 text-sm text-slate-300">
+            <p>• Dashboards em tempo real</p>
+            <p>• Monitoramento de campanhas por canal</p>
+            <p>• Insights acionáveis por IA</p>
+          </div>
+        </aside>
+
+        <div className="flex w-full flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_60px_rgba(7,11,24,0.45)]">
+          <div className="space-y-2 text-center lg:text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300 lg:hidden">
+              KeepAIS Login
+            </p>
+            <h1 className="text-3xl font-semibold">{t("login.title")}</h1>
+            <p className="text-sm text-slate-400">{t("login.subtitle")}</p>
+          </div>
 
         {(formError || error) && (
           <div className="rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
@@ -99,12 +128,13 @@ function Login() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-slate-400">
-          {t("login.signupPrompt")}{" "}
-          <Link to="/signup" className="text-orange-300 hover:text-orange-200">
-            {t("login.signupLink")}
-          </Link>
-        </p>
+          <p className="text-center text-sm text-slate-400 lg:text-left">
+            {t("login.signupPrompt")}{" "}
+            <Link to="/signup" className="text-orange-300 hover:text-orange-200">
+              {t("login.signupLink")}
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ function Home() {
     <div className="min-h-screen bg-[#0b0c14] text-white">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),transparent_45%),radial-gradient(circle_at_right,_rgba(249,115,22,0.18),transparent_40%)]" />
       <Navbar />
-      <main className="flex flex-col gap-24 pb-20 pt-10 sm:pt-16">
+      <main className="flex flex-col gap-24 px-4 pb-20 pt-10 sm:px-6 sm:pt-16 lg:px-8">
         <Hero />
         <Features />
         <HowItWorks />
