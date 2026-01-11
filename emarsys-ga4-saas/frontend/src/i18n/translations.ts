@@ -3,6 +3,7 @@ export type Locale = "pt-BR" | "en-US";
 export const translations: Record<Locale, Record<string, string>> = {
   "pt-BR": {
     "nav.overview": "Visão geral",
+    "nav.recommendations": "Recomendação de produtos",
     "nav.campaigns": "Campanhas",
     "nav.abandonedCarts": "Carrinhos abandonados",
     "nav.analytics": "Análises",
@@ -90,6 +91,22 @@ export const translations: Record<Locale, Record<string, string>> = {
     "dashboard.panel.plotYAxis": "Taxa de clique",
     "dashboard.panel.funnelTitle": "Funil de conversão",
     "dashboard.panel.funnelSubtitle": "Evolução dos usuários pelo funil",
+    "dashboard.recommendations.title": "Recomendação de produtos",
+    "dashboard.recommendations.subtitle":
+      "Sugestões baseadas no comportamento do cliente e no histórico de compras.",
+    "dashboard.recommendations.cta": "Atualizadas agora",
+    "dashboard.recommendations.item.bundle.title": "Bundles inteligentes",
+    "dashboard.recommendations.item.bundle.description":
+      "Combine itens complementares para aumentar o ticket médio.",
+    "dashboard.recommendations.item.crossSell.title": "Cross-sell automático",
+    "dashboard.recommendations.item.crossSell.description":
+      "Recomendações em tempo real no carrinho e no checkout.",
+    "dashboard.recommendations.item.upsell.title": "Upsell personalizado",
+    "dashboard.recommendations.item.upsell.description":
+      "Sugira versões premium com base no perfil do cliente.",
+    "dashboard.recommendations.item.trending.title": "Produtos em alta",
+    "dashboard.recommendations.item.trending.description":
+      "Destaque os itens mais buscados da semana.",
     "campaigns.title": "Campanhas",
     "campaigns.subtitle": "Performance geral das campanhas ativas",
     "campaigns.label": "Campanhas",
@@ -182,6 +199,10 @@ export const translations: Record<Locale, Record<string, string>> = {
       "Perfeito. Vou montar um painel com: volume de carrinhos, valor recuperado, conversões por canal e tendência semanal. Quer incluir alertas automáticos?",
     "advisor.placeholder":
       "Peça um dashboard, pergunte sobre performance, ou descreva um playbook...",
+    "recommendations.title": "Recomendação de produtos",
+    "recommendations.subtitle":
+      "Sugestões para aumentar conversões com base em comportamento e histórico.",
+    "recommendations.label": "Recomendação de produtos",
     "profile.title": "Perfil",
     "profile.subtitle": "Informações da conta e preferências",
     "profile.label": "Perfil do usuário",
@@ -203,6 +224,7 @@ export const translations: Record<Locale, Record<string, string>> = {
   },
   "en-US": {
     "nav.overview": "Overview",
+    "nav.recommendations": "Product recommendations",
     "nav.campaigns": "Campaigns",
     "nav.abandonedCarts": "Abandoned Carts",
     "nav.analytics": "Analytics",
@@ -290,6 +312,22 @@ export const translations: Record<Locale, Record<string, string>> = {
     "dashboard.panel.plotYAxis": "Click rate",
     "dashboard.panel.funnelTitle": "Conversion funnel",
     "dashboard.panel.funnelSubtitle": "User progression through the funnel",
+    "dashboard.recommendations.title": "Product recommendations",
+    "dashboard.recommendations.subtitle":
+      "Suggestions based on customer behavior and purchase history.",
+    "dashboard.recommendations.cta": "Updated now",
+    "dashboard.recommendations.item.bundle.title": "Smart bundles",
+    "dashboard.recommendations.item.bundle.description":
+      "Combine complementary items to lift average order value.",
+    "dashboard.recommendations.item.crossSell.title": "Automated cross-sell",
+    "dashboard.recommendations.item.crossSell.description":
+      "Real-time recommendations in cart and checkout.",
+    "dashboard.recommendations.item.upsell.title": "Personalized upsell",
+    "dashboard.recommendations.item.upsell.description":
+      "Suggest premium options based on customer profile.",
+    "dashboard.recommendations.item.trending.title": "Trending products",
+    "dashboard.recommendations.item.trending.description":
+      "Highlight the most searched items this week.",
     "campaigns.title": "Campaigns",
     "campaigns.subtitle": "Overall performance of active campaigns",
     "campaigns.label": "Campaigns",
@@ -381,6 +419,10 @@ export const translations: Record<Locale, Record<string, string>> = {
     "advisor.message.assistant2":
       "Perfect. I'll build a panel with cart volume, recovered value, conversions by channel and weekly trend. Want automatic alerts?",
     "advisor.placeholder": "Ask for a dashboard, performance tips, or describe a playbook...",
+    "recommendations.title": "Product recommendations",
+    "recommendations.subtitle":
+      "Suggestions to boost conversions based on behavior and purchase history.",
+    "recommendations.label": "Product recommendations",
     "profile.title": "Profile",
     "profile.subtitle": "Account information and preferences",
     "profile.label": "User profile",

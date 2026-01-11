@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Playbooks from "./pages/Playbooks";
 import Profile from "./pages/Profile";
+import Recommendations from "./pages/Recommendations";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -22,6 +23,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/recommendations"
+        element={
+          <ProtectedRoute>
+            <Recommendations />
           </ProtectedRoute>
         }
       />

@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import TopBar from "./TopBar";
 
@@ -9,9 +9,18 @@ type DashboardLayoutProps = {
   children: ReactNode;
 };
 
+const themeStorageKey = "keepais:dashboard-theme";
+
 function DashboardLayout({ title, subtitle, label, children }: DashboardLayoutProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    const stored = localStorage.getItem(themeStorageKey);
+    return stored === "light" ? "light" : "dark";
+  });
   const themeClass = theme === "light" ? "theme-light" : "";
+
+  useEffect(() => {
+    localStorage.setItem(themeStorageKey, theme);
+  }, [theme]);
 
   return (
     <div

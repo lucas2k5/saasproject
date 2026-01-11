@@ -272,7 +272,10 @@ function Dashboard() {
               </div>
               <div className="mt-6 space-y-4">
                 {["Alpha", "Nova", "Pulse", "Orbit"].map((label, index) => (
-                  <div className="grid grid-cols-[90px_1fr] items-center gap-4 text-sm" key={label}>
+                  <div
+                    className="grid grid-cols-[90px_1fr] items-center gap-4 text-sm"
+                    key={label}
+                  >
                     <span className="text-[color:var(--muted)]">{label}</span>
                     <div className="h-2 rounded-full bg-[color:var(--stroke)]">
                       <div
@@ -509,6 +512,7 @@ function Dashboard() {
               </div>
             </section>
           </section>
+
         </>
       )}
     </DashboardLayout>

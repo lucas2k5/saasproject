@@ -4,6 +4,7 @@ import { useLocale } from "../context/LocaleContext";
 
 const navItems = [
   { labelKey: "nav.overview", path: "/dashboard" },
+  { labelKey: "nav.recommendations", path: "/dashboard/recommendations" },
   { labelKey: "nav.campaigns", path: "/dashboard/campaigns" },
   { labelKey: "nav.abandonedCarts", path: "/dashboard/abandoned-carts" },
   { labelKey: "nav.analytics", path: "/dashboard/analytics" },
