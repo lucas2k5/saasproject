@@ -1,0 +1,694 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS Core API
+  version: 1.0.0
+  description: >
+    Core API for KeepAIS. Provides multi-tenant workspace resources and unified
+    views of campaigns, contacts, products, events, and dashboards.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: Core
+    description: Core platform resources
+  - name: Workspaces
+    description: Multi-tenant workspace management
+  - name: Dashboards
+    description: Dashboard definitions and widgets
+  - name: Segments
+    description: Audience segmentation
+  - name: Unified Views
+    description: Unified data views across providers
+  - name: Integrations
+    description: Integration management
+security:
+  - bearerAuth: []
+paths:
+  /workspaces:
+    get:
+      tags: [Workspaces]
+      summary: List workspaces
+      responses:
+        "200":
+          description: Workspaces for the authenticated user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workspace"
+              examples:
+                default:
+                  value:
+                    - id: "ws_123"
+                      name: "KeepAIS Demo"
+                      ownerId: "usr_001"
+                      createdAt: "2024-10-01T10:00:00Z"
+                      updatedAt: "2024-10-05T14:30:00Z"
+    post:
+      tags: [Workspaces]
+      summary: Create a workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  example: "Marketing Ops"
+      responses:
+        "201":
+          description: Workspace created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workspace"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /workspaces/{workspaceId}:
+    get:
+      tags: [Workspaces]
+      summary: Get workspace by id
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      responses:
+        "200":
+          description: Workspace
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workspace"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /workspaces/{workspaceId}/integrations:
+    get:
+      tags: [Integrations]
+      summary: List integrations for a workspace
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      responses:
+        "200":
+          description: Integrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Integration"
+    post:
+      tags: [Integrations]
+      summary: Create an integration
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, name]
+              properties:
+                type:
+                  $ref: "#/components/schemas/IntegrationType"
+                name:
+                  type: string
+                  example: "Emarsys - Loja BR"
+      responses:
+        "201":
+          description: Integration created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /workspaces/{workspaceId}/integrations/{integrationId}:
+    get:
+      tags: [Integrations]
+      summary: Get integration details
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/IntegrationId"
+      responses:
+        "200":
+          description: Integration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags: [Integrations]
+      summary: Remove integration
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/IntegrationId"
+      responses:
+        "204":
+          description: Integration removed
+
+  /workspaces/{workspaceId}/dashboards:
+    get:
+      tags: [Dashboards]
+      summary: List dashboards
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      responses:
+        "200":
+          description: Dashboards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+    post:
+      tags: [Dashboards]
+      summary: Create a dashboard
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dashboard"
+      responses:
+        "201":
+          description: Dashboard created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+
+  /workspaces/{workspaceId}/dashboards/{dashboardId}:
+    get:
+      tags: [Dashboards]
+      summary: Get dashboard
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/DashboardId"
+      responses:
+        "200":
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+    put:
+      tags: [Dashboards]
+      summary: Update dashboard
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/DashboardId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dashboard"
+      responses:
+        "200":
+          description: Updated dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+    delete:
+      tags: [Dashboards]
+      summary: Delete dashboard
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/DashboardId"
+      responses:
+        "204":
+          description: Deleted
+
+  /workspaces/{workspaceId}/segments:
+    get:
+      tags: [Segments]
+      summary: List segments
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      responses:
+        "200":
+          description: Segments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Segment"
+    post:
+      tags: [Segments]
+      summary: Create segment
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Segment"
+      responses:
+        "201":
+          description: Segment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Segment"
+
+  /workspaces/{workspaceId}/segments/{segmentId}:
+    get:
+      tags: [Segments]
+      summary: Get segment
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/SegmentId"
+      responses:
+        "200":
+          description: Segment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Segment"
+    put:
+      tags: [Segments]
+      summary: Update segment
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/SegmentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Segment"
+      responses:
+        "200":
+          description: Updated segment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Segment"
+    delete:
+      tags: [Segments]
+      summary: Delete segment
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/SegmentId"
+      responses:
+        "204":
+          description: Deleted
+
+  /workspaces/{workspaceId}/events:
+    get:
+      tags: [Unified Views]
+      summary: List unified events
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: Events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /workspaces/{workspaceId}/campaigns:
+    get:
+      tags: [Unified Views]
+      summary: Unified campaigns
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+        - $ref: "#/components/parameters/Source"
+      responses:
+        "200":
+          description: Campaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Campaign"
+
+  /workspaces/{workspaceId}/contacts:
+    get:
+      tags: [Unified Views]
+      summary: Unified contacts
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/Source"
+      responses:
+        "200":
+          description: Contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+
+  /workspaces/{workspaceId}/products:
+    get:
+      tags: [Unified Views]
+      summary: Unified products
+      parameters:
+        - $ref: "#/components/parameters/WorkspaceId"
+        - $ref: "#/components/parameters/Source"
+      responses:
+        "200":
+          description: Products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+components:
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "ws_123"
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_456"
+    DashboardId:
+      name: dashboardId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "dash_001"
+    SegmentId:
+      name: segmentId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "seg_001"
+    FromDate:
+      name: from
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Source:
+      name: source
+      in: query
+      required: false
+      schema:
+        type: string
+        example: "emarsys"
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "bad_request"
+                message: "Invalid payload"
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "not_found"
+                message: "Resource not found"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Workspace:
+      type: object
+      required: [id, name, ownerId, createdAt]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        ownerId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    IntegrationType:
+      type: string
+      enum: [EMARSYS, GA4, VTEX, HUBSPOT, KLAVIYO, SFMC]
+    IntegrationStatus:
+      type: string
+      enum: [CONNECTED, DISCONNECTED, SYNCING, ERROR]
+    Integration:
+      type: object
+      required: [id, workspaceId, type, status, createdAt]
+      properties:
+        id:
+          type: string
+        workspaceId:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/IntegrationType"
+        status:
+          $ref: "#/components/schemas/IntegrationStatus"
+        lastSyncAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    IntegrationSummary:
+      type: object
+      properties:
+        integrationId:
+          type: string
+        type:
+          $ref: "#/components/schemas/IntegrationType"
+        status:
+          $ref: "#/components/schemas/IntegrationStatus"
+        lastSyncAt:
+          type: string
+          format: date-time
+        health:
+          type: string
+          example: "ok"
+    Contact:
+      type: object
+      required: [id, email, source]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        source:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    Campaign:
+      type: object
+      required: [id, name, status, channel, source]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, RUNNING, PAUSED, COMPLETED]
+        channel:
+          type: string
+          example: "email"
+        sends:
+          type: integer
+          example: 10000
+        opens:
+          type: integer
+          example: 4500
+        clicks:
+          type: integer
+          example: 900
+        conversions:
+          type: integer
+          example: 120
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        source:
+          type: string
+          example: "emarsys"
+    Product:
+      type: object
+      required: [id, name, sku, price, currency]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sku:
+          type: string
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: "BRL"
+        imageUrl:
+          type: string
+        category:
+          type: string
+        stockStatus:
+          type: string
+          enum: [IN_STOCK, OUT_OF_STOCK, PREORDER]
+    Event:
+      type: object
+      required: [id, type, occurredAt, source]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "cart_abandoned"
+        occurredAt:
+          type: string
+          format: date-time
+        subjectId:
+          type: string
+          description: Identifier of the entity related to the event
+        source:
+          type: string
+        properties:
+          type: object
+          additionalProperties: true
+    Segment:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/SegmentRule"
+    SegmentRule:
+      type: object
+      required: [field, operator, value]
+      properties:
+        field:
+          type: string
+          example: "last_purchase_at"
+        operator:
+          type: string
+          example: ">"
+        value:
+          type: string
+          example: "2024-09-01"
+    Dashboard:
+      type: object
+      required: [id, name, widgets]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        widgets:
+          type: array
+          items:
+            $ref: "#/components/schemas/DashboardWidget"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DashboardWidget:
+      type: object
+      required: [id, type, title]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [metric, chart, table, funnel, map]
+        title:
+          type: string
+        query:
+          type: object
+          description: Serialized query definition
+        visualization:
+          type: object
+          description: Visualization settings
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

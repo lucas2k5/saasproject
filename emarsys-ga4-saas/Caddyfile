@@ -1,7 +1,7 @@
 keepais.com.br, www.keepais.com.br {
   encode gzip
 
-  @api path /api/* /health
+  @api path /api/* /health /docs* 
   handle @api {
     reverse_proxy backend:3001
   }

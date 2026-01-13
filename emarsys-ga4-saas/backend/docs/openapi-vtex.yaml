@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – VTEX Integration API
+  version: 1.0.0
+  description: >
+    VTEX integration endpoints for KeepAIS. Provides normalized access to
+    orders and products for a given integration.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: VTEX Integration
+    description: VTEX provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/vtex/orders:
+    get:
+      tags: [VTEX Integration]
+      summary: List VTEX orders
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: VTEX orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VtexOrder"
+              examples:
+                default:
+                  value:
+                    - id: "order_1001"
+                      status: "invoiced"
+                      total: 1290.5
+                      currency: "BRL"
+                      createdAt: "2024-10-05T10:20:00Z"
+                      customerEmail: "cliente@loja.com"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/vtex/products:
+    get:
+      tags: [VTEX Integration]
+      summary: List VTEX products
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: VTEX products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/VtexProduct"
+                  nextCursor:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_vtex_001"
+    FromDate:
+      name: from
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        example: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    VtexOrder:
+      type: object
+      required: [id, status, total, currency, createdAt]
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          example: "invoiced"
+        total:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: "BRL"
+        createdAt:
+          type: string
+          format: date-time
+        customerEmail:
+          type: string
+          format: email
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/VtexOrderItem"
+    VtexOrderItem:
+      type: object
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: integer
+        price:
+          type: number
+          format: float
+    VtexProduct:
+      type: object
+      required: [id, sku, name]
+      properties:
+        id:
+          type: string
+        sku:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: "BRL"
+        category:
+          type: string
+        availability:
+          type: string
+          enum: [available, unavailable, preorder]
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

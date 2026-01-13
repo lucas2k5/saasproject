@@ -1,0 +1,304 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – Emarsys Integration API
+  version: 1.0.0
+  description: >
+    Emarsys integration endpoints for KeepAIS. These endpoints expose a curated,
+    normalized view of Emarsys data for a given integration.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: Emarsys Integration
+    description: Emarsys provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/emarsys/contacts:
+    get:
+      tags: [Emarsys Integration]
+      summary: List Emarsys contacts
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: Emarsys contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EmarsysContact"
+                  nextCursor:
+                    type: string
+              examples:
+                default:
+                  value:
+                    data:
+                      - id: "em_001"
+                        email: "cliente@empresa.com"
+                        firstName: "Maria"
+                        lastName: "Souza"
+                        status: "active"
+                        createdAt: "2024-10-01T12:00:00Z"
+                    nextCursor: "cursor_2"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/emarsys/campaigns:
+    get:
+      tags: [Emarsys Integration]
+      summary: List Emarsys campaigns
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: Emarsys campaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmarsysCampaign"
+              examples:
+                default:
+                  value:
+                    - id: "cmp_902"
+                      name: "Carrinho abandonado - 48h"
+                      status: "RUNNING"
+                      channel: "email"
+                      sends: 12000
+                      opens: 5400
+                      clicks: 950
+                      conversions: 140
+                      updatedAt: "2024-10-06T08:30:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/emarsys/events:
+    get:
+      tags: [Emarsys Integration]
+      summary: List Emarsys events
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: Emarsys events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmarsysEvent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/emarsys/products:
+    get:
+      tags: [Emarsys Integration]
+      summary: List Emarsys products
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: Emarsys products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EmarsysProduct"
+                  nextCursor:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/emarsys/campaigns/sync:
+    post:
+      tags: [Emarsys Integration]
+      summary: Trigger campaign sync
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+      responses:
+        "202":
+          description: Sync queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SyncResponse"
+              examples:
+                default:
+                  value:
+                    status: "queued"
+                    message: "Sync started"
+                    queuedAt: "2024-10-06T10:15:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_emarsys_001"
+    FromDate:
+      name: from
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        example: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    EmarsysContact:
+      type: object
+      required: [id, email, status]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive, bounced]
+        createdAt:
+          type: string
+          format: date-time
+    EmarsysCampaign:
+      type: object
+      required: [id, name, status, channel]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, RUNNING, PAUSED, COMPLETED]
+        channel:
+          type: string
+          example: "email"
+        sends:
+          type: integer
+        opens:
+          type: integer
+        clicks:
+          type: integer
+        conversions:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+    EmarsysEvent:
+      type: object
+      required: [id, type, occurredAt]
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "open"
+        occurredAt:
+          type: string
+          format: date-time
+        contactId:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+    EmarsysProduct:
+      type: object
+      required: [id, sku, name]
+      properties:
+        id:
+          type: string
+        sku:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: "BRL"
+        stock:
+          type: integer
+    SyncResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "queued"
+        message:
+          type: string
+        queuedAt:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

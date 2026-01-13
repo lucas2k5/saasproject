@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – HubSpot Integration API
+  version: 1.0.0
+  description: >
+    HubSpot integration endpoints for KeepAIS. Provides normalized contacts and
+    deal data for a given integration.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: HubSpot Integration
+    description: HubSpot provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/hubspot/contacts:
+    get:
+      tags: [HubSpot Integration]
+      summary: List HubSpot contacts
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: HubSpot contacts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/HubspotContact"
+                  nextCursor:
+                    type: string
+              examples:
+                default:
+                  value:
+                    data:
+                      - id: "hs_001"
+                        email: "contato@empresa.com"
+                        firstName: "João"
+                        lastName: "Pereira"
+                        lifecycleStage: "lead"
+                        createdAt: "2024-10-03T09:00:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/hubspot/deals:
+    get:
+      tags: [HubSpot Integration]
+      summary: List HubSpot deals
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: HubSpot deals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/HubspotDeal"
+              examples:
+                default:
+                  value:
+                    - id: "deal_900"
+                      name: "Expansão - Enterprise"
+                      stage: "negotiation"
+                      amount: 92000
+                      currency: "BRL"
+                      closedAt: "2024-10-12T12:00:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_hubspot_001"
+    FromDate:
+      name: from
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        example: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    HubspotContact:
+      type: object
+      required: [id, email]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lifecycleStage:
+          type: string
+          example: "lead"
+        createdAt:
+          type: string
+          format: date-time
+    HubspotDeal:
+      type: object
+      required: [id, name, stage]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        stage:
+          type: string
+          example: "negotiation"
+        amount:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: "BRL"
+        closedAt:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

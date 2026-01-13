@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – SFMC Integration API
+  version: 1.0.0
+  description: >
+    Salesforce Marketing Cloud integration endpoints for KeepAIS. Provides
+    normalized campaigns and subscriber data for a given integration.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: SFMC Integration
+    description: Salesforce Marketing Cloud provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/sfmc/campaigns:
+    get:
+      tags: [SFMC Integration]
+      summary: List SFMC campaigns
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: SFMC campaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SfmcCampaign"
+              examples:
+                default:
+                  value:
+                    - id: "sfmc_001"
+                      name: "Black Friday SFMC"
+                      status: "RUNNING"
+                      channel: "email"
+                      sends: 15000
+                      opens: 6500
+                      clicks: 1400
+                      conversions: 280
+                      updatedAt: "2024-10-09T14:10:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/sfmc/subscribers:
+    get:
+      tags: [SFMC Integration]
+      summary: List SFMC subscribers
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: SFMC subscribers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SfmcSubscriber"
+                  nextCursor:
+                    type: string
+              examples:
+                default:
+                  value:
+                    data:
+                      - id: "sub_001"
+                        email: "subscriber@empresa.com"
+                        status: "active"
+                        createdAt: "2024-09-20T09:30:00Z"
+                    nextCursor: "cursor_2"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_sfmc_001"
+    FromDate:
+      name: from
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        example: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SfmcCampaign:
+      type: object
+      required: [id, name, status, channel]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, RUNNING, PAUSED, COMPLETED]
+        channel:
+          type: string
+          example: "email"
+        sends:
+          type: integer
+        opens:
+          type: integer
+        clicks:
+          type: integer
+        conversions:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+    SfmcSubscriber:
+      type: object
+      required: [id, email]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        status:
+          type: string
+          enum: [active, bounced, unsubscribed]
+        createdAt:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

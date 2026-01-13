@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – Klaviyo Integration API
+  version: 1.0.0
+  description: >
+    Klaviyo integration endpoints for KeepAIS. Provides normalized campaigns
+    and lists for a given integration.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: Klaviyo Integration
+    description: Klaviyo provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/klaviyo/campaigns:
+    get:
+      tags: [Klaviyo Integration]
+      summary: List Klaviyo campaigns
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/FromDate"
+        - $ref: "#/components/parameters/ToDate"
+      responses:
+        "200":
+          description: Klaviyo campaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KlaviyoCampaign"
+              examples:
+                default:
+                  value:
+                    - id: "kl_campaign_001"
+                      name: "Promo Relâmpago"
+                      status: "SENT"
+                      channel: "email"
+                      sends: 20000
+                      opens: 8400
+                      clicks: 2100
+                      conversions: 340
+                      updatedAt: "2024-10-08T12:00:00Z"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/klaviyo/lists:
+    get:
+      tags: [Klaviyo Integration]
+      summary: List Klaviyo lists
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Cursor"
+      responses:
+        "200":
+          description: Klaviyo lists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/KlaviyoList"
+                  nextCursor:
+                    type: string
+              examples:
+                default:
+                  value:
+                    data:
+                      - id: "list_001"
+                        name: "Clientes VIP"
+                        size: 1200
+                        createdAt: "2024-09-15T08:00:00Z"
+                    nextCursor: "cursor_2"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_klaviyo_001"
+    FromDate:
+      name: from
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-01"
+    ToDate:
+      name: to
+      in: query
+      schema:
+        type: string
+        format: date
+      example: "2024-10-31"
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        example: 50
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    KlaviyoCampaign:
+      type: object
+      required: [id, name, status, channel]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, SENT, ARCHIVED]
+        channel:
+          type: string
+          example: "email"
+        sends:
+          type: integer
+        opens:
+          type: integer
+        clicks:
+          type: integer
+        conversions:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+    KlaviyoList:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

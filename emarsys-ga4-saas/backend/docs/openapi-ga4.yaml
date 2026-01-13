@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: KeepAIS – GA4 Integration API
+  version: 1.0.0
+  description: >
+    GA4 integration endpoints for KeepAIS. Provides a generic query endpoint and
+    curated presets for analytics use cases.
+servers:
+  - url: http://localhost:3001
+    description: Local development
+tags:
+  - name: GA4 Integration
+    description: Google Analytics 4 provider endpoints
+security:
+  - bearerAuth: []
+paths:
+  /integrations/{integrationId}/ga4/query:
+    post:
+      tags: [GA4 Integration]
+      summary: Run a GA4 query
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GA4Query"
+            examples:
+              sessionsBySource:
+                value:
+                  dateRanges:
+                    - startDate: "2024-10-01"
+                      endDate: "2024-10-31"
+                  dimensions:
+                    - name: "sessionSource"
+                  metrics:
+                    - name: "sessions"
+                  limit: 50
+      responses:
+        "200":
+          description: GA4 query result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GA4Result"
+              examples:
+                default:
+                  value:
+                    rows:
+                      - dimensionValues:
+                          - value: "google"
+                        metricValues:
+                          - value: "12000"
+                    totals:
+                      - metricValues:
+                          - value: "48000"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /integrations/{integrationId}/ga4/presets:
+    get:
+      tags: [GA4 Integration]
+      summary: List GA4 preset queries
+      parameters:
+        - $ref: "#/components/parameters/IntegrationId"
+      responses:
+        "200":
+          description: Presets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GA4Preset"
+              examples:
+                default:
+                  value:
+                    - id: "sessions-by-channel"
+                      title: "Sessões por canal"
+                      description: "Distribuição de sessões por canal."
+                      query:
+                        dateRanges:
+                          - startDate: "2024-10-01"
+                            endDate: "2024-10-31"
+                        dimensions:
+                          - name: "sessionDefaultChannelGroup"
+                        metrics:
+                          - name: "sessions"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IntegrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "int_ga4_001"
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "bad_request"
+                message: "Invalid query"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                code: "unauthorized"
+                message: "Missing or invalid token"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    GA4Query:
+      type: object
+      required: [dateRanges, metrics]
+      properties:
+        dateRanges:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4DateRange"
+        dimensions:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Dimension"
+        metrics:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Metric"
+        limit:
+          type: integer
+          example: 100
+        offset:
+          type: integer
+          example: 0
+        orderBys:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4OrderBy"
+        filters:
+          $ref: "#/components/schemas/GA4Filter"
+    GA4DateRange:
+      type: object
+      required: [startDate, endDate]
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+    GA4Dimension:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: "sessionSource"
+    GA4Metric:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          example: "sessions"
+    GA4OrderBy:
+      type: object
+      properties:
+        metric:
+          type: string
+          example: "sessions"
+        desc:
+          type: boolean
+          example: true
+    GA4Filter:
+      type: object
+      properties:
+        field:
+          type: string
+          example: "country"
+        operator:
+          type: string
+          example: "EQUALS"
+        value:
+          type: string
+          example: "BR"
+    GA4Result:
+      type: object
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Row"
+        totals:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Totals"
+    GA4Row:
+      type: object
+      properties:
+        dimensionValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Value"
+        metricValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Value"
+    GA4Totals:
+      type: object
+      properties:
+        metricValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/GA4Value"
+    GA4Value:
+      type: object
+      properties:
+        value:
+          type: string
+          example: "1200"
+    GA4Preset:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        query:
+          $ref: "#/components/schemas/GA4Query"
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

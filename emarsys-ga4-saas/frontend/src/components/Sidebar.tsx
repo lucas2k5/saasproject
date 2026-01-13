@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLocale } from "../context/LocaleContext";
 
 const navItems = [
-  { labelKey: "nav.overview", path: "/dashboard" },
+  { labelKey: "nav.overview", path: "/dashboard", end: true },
   { labelKey: "nav.recommendations", path: "/dashboard/recommendations" },
   { labelKey: "nav.campaigns", path: "/dashboard/campaigns" },
   { labelKey: "nav.abandonedCarts", path: "/dashboard/abandoned-carts" },
@@ -52,6 +52,7 @@ function Sidebar({ theme, onToggleTheme }: SidebarProps) {
           <NavLink
             key={item.labelKey}
             to={item.path}
+            end={item.end}
             className={({ isActive }) =>
               `${linkBase} ${
                 isActive
