@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import GoogleIcon from "../components/GoogleIcon";
 import { useAuth } from "../context/AuthContext";
 import { useLocale } from "../context/LocaleContext";
 
 function Signup() {
-  const { user, signUp, signInWithGoogle, loading, error, hasSupabaseConfig } = useAuth();
+  const { user, signUp, loading, error, hasSupabaseConfig } = useAuth();
   const { t } = useLocale();
   const [fullName, setFullName] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -100,28 +99,6 @@ function Signup() {
             {successMessage}
           </div>
         )}
-
-        <button
-          type="button"
-          onClick={async () => {
-            setFormError(null);
-            const result = await signInWithGoogle();
-            if (result) {
-              setFormError(result);
-            }
-          }}
-          disabled={loading || !hasSupabaseConfig}
-          className="flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          <GoogleIcon className="h-5 w-5" />
-          {t("signup.google")}
-        </button>
-
-        <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-500">
-          <span className="h-px flex-1 bg-white/10" />
-          {t("signup.or")}
-          <span className="h-px flex-1 bg-white/10" />
-        </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <label className="flex flex-col gap-2 text-sm">
