@@ -5,6 +5,7 @@ import Analytics from "./pages/Analytics";
 import Campaigns from "./pages/Campaigns";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import Integrations from "./pages/Integrations";
 import Playbooks from "./pages/Playbooks";
 import Profile from "./pages/Profile";
 import Recommendations from "./pages/Recommendations";
@@ -71,6 +72,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Playbooks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/integrations"
+        element={
+          <ProtectedRoute>
+            <Integrations />
           </ProtectedRoute>
         }
       />

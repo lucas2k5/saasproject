@@ -9,7 +9,8 @@ const navItems = [
   { labelKey: "nav.abandonedCarts", path: "/dashboard/abandoned-carts" },
   { labelKey: "nav.analytics", path: "/dashboard/analytics" },
   { labelKey: "nav.aiAdvisor", path: "/dashboard/ai-advisor" },
-  { labelKey: "nav.playbooks", path: "/dashboard/playbooks" }
+  { labelKey: "nav.playbooks", path: "/dashboard/playbooks" },
+  { labelKey: "nav.integrations", path: "/dashboard/integrations" }
 ];
 
 type SidebarProps = {

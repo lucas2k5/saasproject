@@ -9,6 +9,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "nav.analytics": "Análises",
     "nav.aiAdvisor": "AI Advisor",
     "nav.playbooks": "Playbooks",
+    "nav.integrations": "Integrações",
     "nav.profile": "Perfil",
     "source.combined": "Combinado",
     "source.emarsys": "Emarsys",
@@ -184,6 +185,60 @@ export const translations: Record<Locale, Record<string, string>> = {
     "playbooks.template.lead": "Lead Nurture",
     "playbooks.template.reactivation": "Reactivation",
     "playbooks.status.configure": "Configurar",
+    "integrations.title": "Integrações",
+    "integrations.subtitle":
+      "Conecte suas ferramentas de marketing e habilite campanhas com WhatsApp.",
+    "integrations.label": "Integrações",
+    "integrations.stat.connected": "Conectores conectados",
+    "integrations.stat.available": "Conectores no escopo",
+    "integrations.stat.whatsappTemplates": "Templates WhatsApp",
+    "integrations.stat.campaignsLive": "Campanhas WhatsApp ativas",
+    "integrations.tabs.marketing": "Ferramentas de marketing",
+    "integrations.tabs.whatsapp": "Integração com WhatsApp",
+    "integrations.marketing.title": "Conectores de marketing no escopo",
+    "integrations.marketing.subtitle":
+      "Integrações nativas para sincronizar audiência, eventos e receita entre canais.",
+    "integrations.marketing.tool.emarsys":
+      "Automação de campanhas, segmentação e eventos comportamentais.",
+    "integrations.marketing.tool.hubspot":
+      "Leads, CRM e jornadas de nutrição sincronizadas com o funil.",
+    "integrations.marketing.tool.sfmc":
+      "Templates, jornadas e audiências para campanhas enterprise.",
+    "integrations.marketing.tool.vtex":
+      "Catálogo, pedidos e eventos de checkout para gatilhos omnichannel.",
+    "integrations.marketing.tool.klaviyo":
+      "Fluxos de retenção e mensageria com sincronização de listas.",
+    "integrations.marketing.tool.ga4":
+      "Sessões, comportamento e conversões para otimização das campanhas.",
+    "integrations.marketing.tool.core":
+      "API central para unificar dados e orquestrar conectores customizados.",
+    "integrations.whatsapp.title": "Central de integração WhatsApp",
+    "integrations.whatsapp.subtitle":
+      "Canal dedicado para campanhas conversacionais e recuperação de receita.",
+    "integrations.whatsapp.number": "Número conectado",
+    "integrations.whatsapp.webhook": "Webhook",
+    "integrations.whatsapp.quality": "Qualidade da conta",
+    "integrations.whatsapp.qualityValue": "Alta",
+    "integrations.whatsapp.feature.templates":
+      "Templates transacionais e promocionais aprovados",
+    "integrations.whatsapp.feature.audience":
+      "Sincronização de audiência por segmento e intenção",
+    "integrations.whatsapp.feature.optimization":
+      "Otimização automática de janela de disparo",
+    "integrations.whatsapp.automationsTitle": "Campanhas com WhatsApp",
+    "integrations.whatsapp.automationsSubtitle":
+      "Fluxos ativos para aquisição, recuperação e retenção.",
+    "integrations.whatsapp.flow.abandoned": "Carrinho abandonado",
+    "integrations.whatsapp.flow.winback": "Reativação de clientes",
+    "integrations.whatsapp.flow.postPurchase": "Pós-compra e NPS",
+    "integrations.whatsapp.flow.promotional": "Campanhas promocionais",
+    "integrations.whatsapp.conversion": "Conversão",
+    "integrations.status.connected": "Conectado",
+    "integrations.status.available": "Disponível",
+    "integrations.sync.hourly": "Sync 1h",
+    "integrations.sync.realtime": "Tempo real",
+    "integrations.channel.marketing": "Marketing",
+    "integrations.channel.whatsapp": "WhatsApp",
     "advisor.title": "AI Advisor",
     "advisor.subtitle": "Recomendações inteligentes para escalar resultados",
     "advisor.label": "AI Advisor",
@@ -230,6 +285,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     "nav.analytics": "Analytics",
     "nav.aiAdvisor": "AI Advisor",
     "nav.playbooks": "Playbooks",
+    "nav.integrations": "Integrations",
     "nav.profile": "Profile",
     "source.combined": "Combined",
     "source.emarsys": "Emarsys",
@@ -405,6 +461,60 @@ export const translations: Record<Locale, Record<string, string>> = {
     "playbooks.template.lead": "Lead Nurture",
     "playbooks.template.reactivation": "Reactivation",
     "playbooks.status.configure": "Configure",
+    "integrations.title": "Integrations",
+    "integrations.subtitle":
+      "Connect your marketing stack and enable campaign orchestration through WhatsApp.",
+    "integrations.label": "Integrations",
+    "integrations.stat.connected": "Connected connectors",
+    "integrations.stat.available": "In-scope connectors",
+    "integrations.stat.whatsappTemplates": "WhatsApp templates",
+    "integrations.stat.campaignsLive": "Active WhatsApp campaigns",
+    "integrations.tabs.marketing": "Marketing stack",
+    "integrations.tabs.whatsapp": "WhatsApp integration",
+    "integrations.marketing.title": "In-scope marketing connectors",
+    "integrations.marketing.subtitle":
+      "Native integrations to sync audiences, events, and revenue across channels.",
+    "integrations.marketing.tool.emarsys":
+      "Campaign automation, segmentation, and behavioral event tracking.",
+    "integrations.marketing.tool.hubspot":
+      "Lead, CRM, and nurture journey sync across the pipeline.",
+    "integrations.marketing.tool.sfmc":
+      "Templates, journeys, and audiences for enterprise campaigns.",
+    "integrations.marketing.tool.vtex":
+      "Catalog, order, and checkout events for omnichannel triggers.",
+    "integrations.marketing.tool.klaviyo":
+      "Retention flows and messaging with audience list sync.",
+    "integrations.marketing.tool.ga4":
+      "Sessions, behavior, and conversions for campaign optimization.",
+    "integrations.marketing.tool.core":
+      "Core API to unify data and orchestrate custom connectors.",
+    "integrations.whatsapp.title": "WhatsApp integration hub",
+    "integrations.whatsapp.subtitle":
+      "Dedicated channel for conversational campaigns and revenue recovery.",
+    "integrations.whatsapp.number": "Connected number",
+    "integrations.whatsapp.webhook": "Webhook",
+    "integrations.whatsapp.quality": "Account quality",
+    "integrations.whatsapp.qualityValue": "High",
+    "integrations.whatsapp.feature.templates":
+      "Approved transactional and promotional templates",
+    "integrations.whatsapp.feature.audience":
+      "Audience sync by segment and purchase intent",
+    "integrations.whatsapp.feature.optimization":
+      "Automatic send-window optimization",
+    "integrations.whatsapp.automationsTitle": "WhatsApp campaign automations",
+    "integrations.whatsapp.automationsSubtitle":
+      "Active flows for acquisition, recovery, and retention.",
+    "integrations.whatsapp.flow.abandoned": "Abandoned cart",
+    "integrations.whatsapp.flow.winback": "Customer winback",
+    "integrations.whatsapp.flow.postPurchase": "Post-purchase and NPS",
+    "integrations.whatsapp.flow.promotional": "Promotional campaigns",
+    "integrations.whatsapp.conversion": "Conversion",
+    "integrations.status.connected": "Connected",
+    "integrations.status.available": "Available",
+    "integrations.sync.hourly": "1h sync",
+    "integrations.sync.realtime": "Real-time",
+    "integrations.channel.marketing": "Marketing",
+    "integrations.channel.whatsapp": "WhatsApp",
     "advisor.title": "AI Advisor",
     "advisor.subtitle": "Smart recommendations to scale results",
     "advisor.label": "AI Advisor",
