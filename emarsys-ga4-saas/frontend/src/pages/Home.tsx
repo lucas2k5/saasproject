@@ -7,6 +7,7 @@ import HowItWorks from "../components/landing/HowItWorks";
 import Integrations from "../components/landing/Integrations";
 import Navbar from "../components/landing/Navbar";
 import Pricing from "../components/landing/Pricing";
+import RecommenderShowcase from "../components/landing/RecommenderShowcase";
 import SocialProof from "../components/landing/SocialProof";
 
 function Home() {
@@ -17,6 +18,7 @@ function Home() {
       <main className="flex flex-col gap-24 px-4 pb-20 pt-10 sm:px-6 sm:pt-16 lg:px-8">
         <Hero />
         <Features />
+        <RecommenderShowcase />
         <HowItWorks />
         <SocialProof />
         <DashboardShowcase />

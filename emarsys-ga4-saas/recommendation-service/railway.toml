@@ -1,0 +1,10 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "FASTEMBED_CACHE_PATH=/app/.fastembed_cache python -c \"from fastembed import TextEmbedding, SparseTextEmbedding; TextEmbedding(model_name='intfloat/multilingual-e5-large'); SparseTextEmbedding(model_name='Qdrant/bm25')\""
+
+[deploy]
+startCommand = "FASTEMBED_CACHE_PATH=/app/.fastembed_cache uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

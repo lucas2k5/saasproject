@@ -8,10 +8,18 @@ import Home from "./pages/Home";
 import Integrations from "./pages/Integrations";
 import Playbooks from "./pages/Playbooks";
 import Profile from "./pages/Profile";
-import Recommendations from "./pages/Recommendations";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RecommendationsLayout from "./components/RecommendationsLayout";
+import { Dashboard as RecDashboard } from "./pages/recommendations/Dashboard";
+import { Catalog as RecCatalog } from "./pages/recommendations/Catalog";
+import { Customers as RecCustomers } from "./pages/recommendations/Customers";
+import { Orders as RecOrders } from "./pages/recommendations/Orders";
+import { Offers as RecOffers } from "./pages/recommendations/Offers";
+import { LifecycleDashboard as RecLifecycle } from "./pages/recommendations/LifecycleDashboard";
+import { Cargas as RecCargas } from "./pages/recommendations/Cargas";
+import { Config as RecConfig } from "./pages/recommendations/Config";
 
 function App() {
   return (
@@ -31,10 +39,19 @@ function App() {
         path="/dashboard/recommendations"
         element={
           <ProtectedRoute>
-            <Recommendations />
+            <RecommendationsLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<RecDashboard />} />
+        <Route path="catalog" element={<RecCatalog />} />
+        <Route path="customers" element={<RecCustomers />} />
+        <Route path="orders" element={<RecOrders />} />
+        <Route path="offers" element={<RecOffers />} />
+        <Route path="lifecycle" element={<RecLifecycle />} />
+        <Route path="uploads" element={<RecCargas />} />
+        <Route path="config" element={<RecConfig />} />
+      </Route>
       <Route
         path="/dashboard/campaigns"
         element={

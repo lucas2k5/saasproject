@@ -3,3 +3,7 @@ dist
 build
 .env
 .vscode
+.DS_Store
+__pycache__
+*.pyc
+tsconfig.tsbuildinfo

@@ -1,0 +1,7 @@
+offer_id,name,type,mechanic_params,trigger_products,reward_products,start_at,end_at,channel_ids,store_ids,audience_type,audience_value,priority
+PROMO-DESC-20,20% OFF seleção,DIRECT_DISCOUNT,"{""discount_type"": ""percent"", ""discount_value"": 20}",SKU-2000|SKU-2001|SKU-2002|SKU-2003|SKU-2004,,2026-03-17T00:00:00,2026-04-16T23:59:59,,,ALL,,1
+PROMO-3X2,Leve 3 Pague 2,TAKE_X_PAY_Y,"{""take"": 3, ""pay"": 2}",SKU-2005|SKU-2006|SKU-2007|SKU-2008,,2026-03-17T00:00:00,2026-03-24T23:59:59,CH-FISICO|CH-APP,,ALL,,2
+PROMO-BUY1GET1,Compre 1 Ganhe Brinde,BUY_X_GET_Y,"{""trigger_quantity"": 1, ""reward_quantity"": 1, ""reward_discount_percent"": 100}",SKU-2009,SKU-2010,2026-03-17T00:00:00,2026-04-16T23:59:59,CH-WEB,,ALL,,3
+PROMO-PROGRESSIVO,Desconto Progressivo por Quantidade,PROGRESSIVE,"{""tiers"": [{""min_qty"": 2, ""discount_percent"": 10}, {""min_qty"": 5, ""discount_percent"": 15}, {""min_qty"": 10, ""discount_percent"": 20}]}",SKU-2011|SKU-2012|SKU-2013,,2026-03-17T00:00:00,2026-04-16T23:59:59,,,ALL,,1
+PROMO-COMBO-VIP,Kit Especial Clientes VIP,COMBO,"{""combo_discount_percent"": 25}",SKU-2014|SKU-2015|SKU-2016,,2026-03-17T00:00:00,2026-04-16T23:59:59,,,CUSTOMER_IDS,CLI-10000|CLI-10001|CLI-10002|CLI-10003|CLI-10004,5
+PROMO-CASHBACK-5,5% Cashback,CASHBACK,"{""cashback_percent"": 5, ""credit_type"": ""wallet""}",SKU-2017|SKU-2018|SKU-2019,,2026-03-17T00:00:00,2026-04-16T23:59:59,CH-WEB|CH-APP,,ALL,,1

@@ -1,0 +1,34 @@
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+sqlalchemy>=2.0.0
+# Drivers de Banco de Dados
+psycopg2-binary>=2.9.0
+asyncpg>=0.28.0
+# IA e Vetores
+qdrant-client==1.17.0
+fastembed==0.7.4
+# Segurança e Auth
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+# Validação e Configuração
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+email-validator>=2.0.0
+python-dotenv>=1.0.0
+# Utilitários
+redis>=5.0.0
+requests>=2.31.0
+python-dateutil>=2.8.0
+bcrypt==4.0.1
+pandas>=2.0.0
+lifetimes==0.11.3
+google-genai>=1.0.0
+alembic
+# Geração de Conteúdo
+boto3>=1.34.0
+Pillow>=10.0.0
+Jinja2>=3.1.0
+# Testes
+pytest>=8.0.0
+httpx>=0.27.0

@@ -1,0 +1,5 @@
+channel_id,name,type,store_mode,is_active,stores
+CH-WEB,E-commerce,web,single,True,"[{""store_id"": ""LOJA-WEB"", ""name"": ""Loja Virtual Web""}]"
+CH-APP,App Mobile,app,multi,True,"[{""store_id"": ""LOJA-01"", ""name"": ""Loja Centro""}, {""store_id"": ""LOJA-02"", ""name"": ""Loja Norte""}, {""store_id"": ""LOJA-03"", ""name"": ""Loja Sul""}]"
+CH-FISICO,Lojas Físicas,loja_fisica,multi,True,"[{""store_id"": ""LOJA-01"", ""name"": ""Loja Centro""}, {""store_id"": ""LOJA-02"", ""name"": ""Loja Norte""}, {""store_id"": ""LOJA-03"", ""name"": ""Loja Sul""}, {""store_id"": ""LOJA-04"", ""name"": ""Loja Leste""}, {""store_id"": ""LOJA-05"", ""name"": ""Loja Shopping""}]"
+CH-TELEVENDAS,Televendas,televendas,single,True,"[{""store_id"": ""LOJA-TELEVENDAS"", ""name"": ""Central Televendas""}]"

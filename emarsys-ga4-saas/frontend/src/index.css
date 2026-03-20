@@ -95,6 +95,11 @@ button {
   font-family: inherit;
 }
 
+.brand-brain-logo {
+  filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 8px rgba(162, 91, 255, 0.26));
+}
+
 .primary-pill {
   display: inline-flex;
   align-items: center;
@@ -1332,4 +1337,50 @@ button {
   .hero-stats {
     grid-template-columns: 1fr;
   }
+}
+
+/* ── rec-zone: bridge emarsys theme → shadcn HSL variables ── */
+.rec-zone {
+  --background: 228 37% 8%;
+  --foreground: 228 47% 95%;
+  --card: 228 41% 14%;
+  --card-foreground: 228 47% 95%;
+  --popover: 228 41% 14%;
+  --popover-foreground: 228 47% 95%;
+  --primary: 16 100% 62%;
+  --primary-foreground: 20 52% 5%;
+  --secondary: 228 42% 17%;
+  --secondary-foreground: 228 47% 95%;
+  --muted: 228 38% 11%;
+  --muted-foreground: 220 20% 65%;
+  --accent: 195 100% 60%;
+  --accent-foreground: 228 47% 95%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 228 47% 95%;
+  --border: 220 10% 20%;
+  --input: 220 10% 20%;
+  --ring: 16 100% 62%;
+  --radius: 0.75rem;
+}
+
+.dashboard-shell.theme-light .rec-zone {
+  --background: 225 38% 97%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 16 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 224 27% 92%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 220 33% 94%;
+  --muted-foreground: 215 16% 34%;
+  --accent: 221 83% 53%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 20% 82%;
+  --input: 220 20% 82%;
+  --ring: 16 100% 50%;
 }

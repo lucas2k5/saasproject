@@ -17,10 +17,10 @@ function Navbar() {
     <header className="sticky top-4 z-20 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <div className="flex items-center justify-between rounded-full border border-white/10 bg-slate-950/80 px-6 py-4 backdrop-blur">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-orange-400/90 shadow-[0_0_18px_rgba(255,122,61,0.35)]" />
-            <span className="text-lg font-semibold text-white">KeepAIS</span>
-          </div>
+          <Link to="/" className="inline-flex items-center gap-2.5" aria-label="Home">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-orange-500 shadow-[0_0_18px_rgba(255,122,61,0.35)]" />
+            <span className="text-sm font-semibold text-white">KeepAIS</span>
+          </Link>
 
           <div className="hidden items-center gap-6 lg:flex">
             <NavigationMenu>
@@ -47,6 +47,14 @@ function Navbar() {
                     href="#pricing"
                   >
                     Planos
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    className="text-sm font-semibold text-slate-200"
+                    href="#recommender"
+                  >
+                    Recomendador IA
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -92,6 +100,9 @@ function Navbar() {
               </a>
               <a href="#pricing" className="font-semibold">
                 Planos
+              </a>
+              <a href="#recommender" className="font-semibold">
+                Recomendador IA
               </a>
               <a href="#integrations" className="font-semibold">
                 Integrações

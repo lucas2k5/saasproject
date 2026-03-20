@@ -5,11 +5,9 @@ function Footer() {
     <footer className="border-t border-white/10 px-4 py-12 text-slate-400 sm:px-6 lg:px-8">
       <div className="mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div className="grid gap-3">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-orange-400/90 shadow-[0_0_16px_rgba(255,122,61,0.3)]" />
-            <div>
-              <p className="text-sm font-semibold text-white">KeepAIS</p>
-            </div>
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-orange-500 shadow-[0_0_18px_rgba(255,122,61,0.35)]" />
+            <span className="text-sm font-semibold text-white">KeepAIS</span>
           </div>
           <p className="text-sm text-slate-400">
             Plataforma de inteligencia para times de marketing baseados em dados.

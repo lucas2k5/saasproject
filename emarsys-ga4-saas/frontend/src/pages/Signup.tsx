@@ -50,9 +50,12 @@ function Signup() {
       <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <aside className="hidden flex-col justify-between rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),transparent_60%),radial-gradient(circle_at_bottom,_rgba(249,115,22,0.18),transparent_55%)] p-10 shadow-[0_30px_60px_rgba(7,11,24,0.45)] lg:flex">
           <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-orange-400/90 shadow-[0_0_18px_rgba(255,122,61,0.35)]" />
-              <span className="text-lg font-semibold text-white">KeepAIS</span>
+            <div className="flex items-center">
+              <img
+                src="/brain-logo.png"
+                alt="Logo em formato de cerebro"
+                className="brand-brain-logo h-10 w-10 object-contain"
+              />
             </div>
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300">
@@ -82,7 +85,7 @@ function Signup() {
           </Link>
           <div className="space-y-2 text-center lg:text-left">
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300 lg:hidden">
-              KeepAIS Signup
+              Signup
             </p>
             <h1 className="text-3xl font-semibold">{t("signup.title")}</h1>
             <p className="text-sm text-slate-400">{t("signup.subtitle")}</p>

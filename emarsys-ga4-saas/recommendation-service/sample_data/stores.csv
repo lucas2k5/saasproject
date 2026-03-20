@@ -1,0 +1,8 @@
+store_id,name,is_active
+LOJA-01,Loja Centro,True
+LOJA-02,Loja Norte,True
+LOJA-03,Loja Sul,True
+LOJA-04,Loja Leste,True
+LOJA-05,Loja Shopping,True
+LOJA-WEB,Loja Virtual Web,True
+LOJA-TELEVENDAS,Central Televendas,True
